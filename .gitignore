@@ -1,0 +1,6 @@
+**/target
+**/*.pyc
+Cargo.lock
+.DS_Store
+*.nro
+agent-tools/

@@ -1,0 +1,63 @@
+name: Release NRO
+
+on:
+  push:
+    tags:
+      - "v*"
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  PLUGIN_NAME: css_first
+
+permissions:
+  contents: write
+
+jobs:
+  plugin:
+    name: Build and publish NRO
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          target: x86_64-unknown-linux-gnu
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: css_first-release
+          cache-all-crates: true
+
+      - name: Install cargo-skyline
+        run: |
+          CARGO_NET_GIT_FETCH_WITH_CLI=true cargo install --git https://github.com/jam1garner/cargo-skyline --locked --force
+          cargo-skyline skyline update-std
+
+      - name: Build release NRO
+        run: cargo skyline build --release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: libcss_first
+          path: target/aarch64-skyline-switch/release/lib${{ env.PLUGIN_NAME }}.nro
+
+      - name: Attach NRO to GitHub Release (tag push)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/aarch64-skyline-switch/release/lib${{ env.PLUGIN_NAME }}.nro
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Attach NRO to existing published release
+        if: github.event_name == 'release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" \
+            "target/aarch64-skyline-switch/release/lib${{ env.PLUGIN_NAME }}.nro" \
+            --clobber
