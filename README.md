@@ -17,32 +17,43 @@ atmosphere/contents/01006A800016E000/romfs/skyline/plugins/
 
 3. Boot the game.
 
-**Do not use with HDR** — HDR already includes this swap. Loading both will double-swap and restore vanilla order (or worse).
+**Do not use with HDR** — HDR already includes this. Including this with HDR will cause issues.
 
 ## Requirements
 
-- Smash Ultimate **13.0.3+** (offsets from that generation)
-- Atmosphere + Skyline
+- Smash Ultimate **13.0.3+**
+- [Atmosphere](https://github.com/atmosphere-nx/atmosphere/releases) + [Skyline](https://github.com/skyline-dev/skyline)
 
-## Build
 
+# How to Build and Install
+You must have Rust and Cargo installed. [Click here](https://www.rust-lang.org/tools/install) for instructions on how to install based on your system.
+
+Once those are installed, open your command prompt or terminal and run the following commands
 ```sh
-cargo install --git https://github.com/jam1garner/cargo-skyline --locked
-cargo skyline update-std
-cargo skyline build --release
+cargo install cargo-skyline
 ```
 
-Output:
-
+To compile your plugin use the following command in the root of the project (beside the `Cargo.toml` file):
+```sh
+cargo skyline build
 ```
-target/aarch64-skyline-switch/release/libcss_first.nro
+Your resulting plugin will be the `.nro` found in the folder
+```
+[plugin name]/target/aarch64-skyline-switch
+```
+To install (you must already have skyline installed on your switch), put the plugin on your SD at:
+```
+sd:/atmosphere/contents/01006A800016E000/romfs/skyline/plugins
 ```
 
-GitHub Actions builds the NRO on push and attaches it to GitHub Releases when you publish a release / push a `v*` tag.
+`cargo skyline` can also automate some of this process via FTP. If you have an FTP client on your Switch, you can run:
+```sh
+cargo skyline set-ip [Switch IP]
+# install to the correct plugin folder on the Switch and listen for logs
+cargo skyline run 
+```
 
 ## Attribution
-
-Scene-order approach originated in HDR:
 
 - Initial hooks: **blujay**
 - Later maintenance / CSS-first fixes: **Brian Allred**, **jobrien97**, others
