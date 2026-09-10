@@ -17,7 +17,7 @@ atmosphere/contents/01006A800016E000/romfs/skyline/plugins/
 
 3. Boot the game.
 
-**Do not use with HDR** — HDR already includes this. Including this with HDR will cause issues.
+**Do not use with HDR** — HDR already includes this. If both are present, issues may happen.
 
 ## Requirements
 
