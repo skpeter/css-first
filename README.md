@@ -21,7 +21,7 @@ atmosphere/contents/01006A800016E000/romfs/skyline/plugins/
 
 ## Requirements
 
-- Smash Ultimate **13.0.3+**
+- Smash Ultimate **13.0.3-13.0.4** (does not work on 13.0.5 yet)
 - [Atmosphere](https://github.com/atmosphere-nx/atmosphere/releases) + [Skyline](https://github.com/skyline-dev/skyline)
 
 
