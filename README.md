@@ -1,5 +1,5 @@
 # css_first
-
+## Important: does not work on 13.0.5 at the moment! Watch this repository for future updates.
 Skyline plugin for **Super Smash Bros. Ultimate** that puts **Character Select before Stage Select**.
 
 Vanilla Versus order is Stage Select → Character Select. This plugin rewrites scene transitions so the flow becomes Character Select → Stage Select.
