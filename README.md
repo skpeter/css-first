@@ -1,5 +1,5 @@
 # css_first
-## Important: does not work on 13.0.5 at the moment! Watch this repository for future updates.
+
 Skyline plugin for **Super Smash Bros. Ultimate** that puts **Character Select before Stage Select**.
 
 Vanilla Versus order is Stage Select → Character Select. This plugin rewrites scene transitions so the flow becomes Character Select → Stage Select.
@@ -21,8 +21,10 @@ atmosphere/contents/01006A800016E000/romfs/skyline/plugins/
 
 ## Requirements
 
-- Smash Ultimate **13.0.3-13.0.4** (does not work on 13.0.5 yet)
+- Smash Ultimate **13.0.5** (offsets from that version)
 - [Atmosphere](https://github.com/atmosphere-nx/atmosphere/releases) + [Skyline](https://github.com/skyline-dev/skyline)
+
+After a game update, run `python tools/scan_nso_offsets.py <main-nso>` and paste the printed offsets into `src/lib.rs`. The NSO may be compressed. The script needs the `lz4` package.
 
 
 # How to Build and Install

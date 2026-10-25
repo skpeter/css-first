@@ -1,7 +1,8 @@
 //! CSS First — swap Smash Ultimate Versus flow so Character Select runs before Stage Select.
 //!
 //! Extracted from HDR (HewDraw-Remix) scene-transition hooks.
-//! Offsets target game version 13.0.3+.
+//! Offsets target game version 13.0.5.
+//! After a game update, refresh them with `tools/scan_nso_offsets.py`.
 //!
 //! Do not load alongside HDR — HDR already installs the same swap.
 
@@ -40,7 +41,7 @@ static mut CSS_CANCEL_TO_LOCAL: bool = false;
 static mut IN_LOCAL_WIRELESS: bool = false;
 
 /// Vanilla wants Stage Select first — rewrite destination to Character Select.
-#[skyline::hook(offset = 0x23357f8, inline)]
+#[skyline::hook(offset = 0x2335c48, inline)]
 unsafe fn sss_to_css(ctx: &InlineCtx) {
     let hashed_string = ctx.registers[1].x() as *mut HashedString;
     let current_scene = (*hashed_string).as_str();
@@ -53,14 +54,14 @@ unsafe fn sss_to_css(ctx: &InlineCtx) {
 }
 
 /// After Character Select, send players to Stage Select (when SSS applies).
-#[skyline::hook(offset = 0x2335184, inline)]
+#[skyline::hook(offset = 0x23355d4, inline)]
 unsafe fn css_to_sss(ctx: &InlineCtx) {
     let hashed_string = ctx.registers[1].x() as *mut HashedString;
     let current_scene = (*hashed_string).as_str();
 
     if current_scene == "CharaSelectScene" {
         let text = skyline::hooks::getRegionAddress(skyline::hooks::Region::Text) as u64;
-        let flag_ptr = (text + 0x530996c) as *const u8;
+        let flag_ptr = (text + 0x530a96c) as *const u8;
         let flag = *flag_ptr.add(3);
 
         // Stage select modes 0/1/2 show SSS; 3/4 skip it.
@@ -74,7 +75,7 @@ unsafe fn css_to_sss(ctx: &InlineCtx) {
 }
 
 /// Fix back/cancel paths when CSS is first (esp. local wireless).
-#[skyline::hook(offset = 0x3726120)]
+#[skyline::hook(offset = 0x37266d0)]
 unsafe fn scene_transition(
     list_ptr: *mut c_void,
     key_struct: *const HashedString,
@@ -118,7 +119,7 @@ unsafe fn scene_transition(
 }
 
 /// Hide Rules on CSS when CSS is first — button otherwise dumps to main menu.
-#[skyline::hook(offset = 0x3771220)]
+#[skyline::hook(offset = 0x37717d0)]
 unsafe fn register_panel_button(
     panel: *mut u64,
     event_code: i32,
@@ -135,7 +136,7 @@ unsafe fn register_panel_button(
     call_original!(panel, event_code, name, arg4, arg5, arg6, arg7, arg8);
 }
 
-#[skyline::from_offset(0x2407280)]
+#[skyline::from_offset(0x24076d0)]
 unsafe fn play_se(param_1: *mut u32, sfx_hash_id: u64);
 
 #[skyline::hook(offset = 0x1a2d440, inline)]
